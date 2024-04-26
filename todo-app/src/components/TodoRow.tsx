@@ -10,7 +10,7 @@ export default function TodoRow(props: ITodoRow): JSX.Element {
 
     return (
         <>
-            <th scope="row">{todo.Name}</th>
+            <th scope="row">{todo.Text}</th>
             <td>{todo.Status}</td>
         </>
     );

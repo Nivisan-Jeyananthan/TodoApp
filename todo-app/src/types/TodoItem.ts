@@ -1,12 +1,12 @@
 export type TodoItem = {
-    Id:string,
-    Name: string,
+    Id: string,
+    Text: string,
     Status: TodoStatus,
 }
 
-export type TodoItemDispatch = TodoItem & {
-type: TodoItemDispatchType,
-todo?: TodoItem
+export type TodoItemDispatch = {
+    readonly type: TodoItemDispatchType,
+    readonly todo: Partial<TodoItem>
 }
 
 export enum TodoItemDispatchType {

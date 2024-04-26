@@ -13,21 +13,21 @@ export default function TodoInput(): React.JSX.Element {
         }
     }
 
-    const handleClick = () => {
+    const handleClickCreate = () => {
         if (todoText) {
             let temp: TodoItem = {
                 Id: useId(),
-                Name: todoText,
+                Text: todoText,
                 Status: TodoStatus.New
             }
-            dispatch({ type: TodoItemDispatchType.added, Id: useId(),Name: todoText,Status: TodoStatus.New })
+            dispatch({ type: TodoItemDispatchType.added, todo: temp})
         }
     }
 
     return (
         <>
             <input type="text" value={todoText} onChange={handleChange} />
-            <button onClick={handleClick}>Create</button>
+            <button onClick={handleClickCreate}>Create</button>
         </>
     );
 }
