@@ -5,19 +5,16 @@ import { TodoItem, TodoItemDispatch, TodoItemDispatchType, TodoStatus } from "..
 export const TodosContext = React.createContext<Array<TodoItem>>([]);
 export const TodoDispatchContext = React.createContext<React.Dispatch<TodoItemDispatch> | null>(null);
 
-type ChildType = React.ReactNode | React.ReactNode[] | undefined
-
-
 const initialTodos: TodoItem[] = [
     { Id: useId(), Text: 'Your first Todo! :) ', Status: TodoStatus.New }
 ];
 
-export function TodosProvider(children: ChildType) {
+export function TodosProvider(props: { children: React.ReactNode }) {
     const [todos, dispatch] = useReducer(todosReducer, initialTodos);
     return (
         <TodosContext.Provider value={todos}>
             <TodoDispatchContext.Provider value={dispatch}>
-                {children}
+                {props.children}
             </TodoDispatchContext.Provider>
         </TodosContext.Provider>
     )

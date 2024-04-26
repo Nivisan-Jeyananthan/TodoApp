@@ -1,7 +1,7 @@
 export type TodoItem = {
-    Id: string,
-    Text: string,
-    Status: TodoStatus,
+    Id?: string,
+    Text?: string,
+    Status?: TodoStatus,
 }
 
 export type TodoItemDispatch = {
