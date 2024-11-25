@@ -1,7 +1,8 @@
 export type TodoItem = {
-    Id?: string,
+    Id?: number,
     Text?: string,
     Status?: TodoStatus,
+    EndsAt?: Date
 }
 
 export type TodoItemDispatch = {
@@ -15,6 +16,6 @@ export enum TodoItemDispatchType {
 
 
 export enum TodoStatus {
-    New,
-    Done
+    New = 0,
+    Done = 1
 }

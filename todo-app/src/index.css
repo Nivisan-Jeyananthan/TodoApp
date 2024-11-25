@@ -1,12 +1,48 @@
+/* Basic CSS Normalization */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  margin: 0;
+  font-family: inherit;
+}
+
+img,
+picture,
+video,
+canvas,
+svg {
+  display: block;
+  max-width: 100%;
+}
+
+input,
+button,
+textarea,
+select {
+  font: inherit;
+}
+
 :root {
-  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  --primary-color: #646cff;
+  --primary-hover-color: #535bf2;
+  --background-color-dark: #242424;
+  --background-color-light: #ffffff;
+  --text-color-dark: rgba(255, 255, 255, 0.87);
+  --text-color-light: #213547;
+  --font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+
+  font-family: var(--font-family);
   line-height: 1.5;
   font-weight: 400;
-
   color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
-
+  color: var(--text-color-dark);
+  background-color: var(--background-color-dark);
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
@@ -15,49 +51,53 @@
 
 a {
   font-weight: 500;
-  color: #646cff;
+  color: var(--primary-color);
   text-decoration: inherit;
 }
 a:hover {
-  color: #535bf2;
+  color: var(--primary-hover-color);
 }
 
 body {
   margin: 0;
   display: flex;
+  flex-direction: column;
   place-items: center;
-  min-width: 320px;
+  padding-top: 3rem;
+  min-width: 20rem;
   min-height: 100vh;
+  justify-content: center;
 }
 
 h1 {
-  font-size: 3.2em;
+  font-size: 3.2rem;
   line-height: 1.1;
 }
 
 button {
-  border-radius: 8px;
+  border-radius: 0.4rem;
   border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
+  padding: 0.7rem 1.2rem;
+  font-size: 1rem;
   font-weight: 500;
   font-family: inherit;
   background-color: #1a1a1a;
   cursor: pointer;
-  transition: border-color 0.25s;
+  transition: border-color 0.25s, background-color 0.25s;
 }
 button:hover {
-  border-color: #646cff;
+  border-color: var(--primary-color);
+  background-color: #333;
 }
 button:focus,
 button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
+  outline: 0.25rem auto -webkit-focus-ring-color;
 }
 
 @media (prefers-color-scheme: light) {
   :root {
-    color: #213547;
-    background-color: #ffffff;
+    color: var(--text-color-light);
+    background-color: var(--background-color-light);
   }
   a:hover {
     color: #747bff;
@@ -65,4 +105,57 @@ button:focus-visible {
   button {
     background-color: #f9f9f9;
   }
+}
+
+.todo-input {
+  display: flex;
+  justify-content: center;
+  gap: 1rem; /* Adds space between the input and the button */
+  align-items: center; /* Center align the items */
+}
+
+input[type="text"] {
+  padding: 0.5rem 1rem; /* Add padding inside the input */
+  border: 1px solid #ccc; /* Add a border */
+  border-radius: 0.4rem; /* Rounded corners */
+  font-size: 1rem; /* Ensure font size matches other elements */
+  background-color: #fff; /* Ensure a light background for better readability */
+  color: var(--text-color-light); /* Text color */
+  transition: border-color 0.25s, box-shadow 0.25s; /* Smooth transition effects */
+}
+
+input[type="text"]:focus {
+  border-color: var(--primary-color); /* Highlight border on focus */
+  box-shadow: 0 0 0 0.2rem rgba(100, 108, 255, 0.25); /* Subtle focus shadow */
+  outline: none; /* Remove default outline */
+}
+
+.danger {
+  background-color: #e74c3c;
+  color: #fff;
+}
+.danger:hover {
+  background-color: #c0392b;
+}
+
+table {
+  table-layout: fixed;
+  width: auto;
+  text-align: center;
+  border-collapse: collapse; /* Ensures that padding works as expected */
+  min-width: 50rem; /* Set the minimum width of the table */
+}
+
+table th,
+table td {
+  padding: 0.5rem 1rem; /* Adjust the padding values as needed */
+  border: 1px solid #ccc; /* Add border for better separation */
+}
+
+/* Apply a larger size to checkboxes */
+input[type="checkbox"] {
+  width: 1.5rem;
+  height: 1.5rem;
+  cursor: pointer; /* Ensures the cursor changes to a pointer for better UX */
+  margin-right: 0.5rem; /* Adds space between checkbox and label */
 }
