@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { TodoItem, TodoItemDispatchType, TodoStatus } from "../types/TodoItemType";
+import { TodoItemType, TodoItemDispatchType, TodoStatus } from "../types/TodoItemType";
 import { useTodosDispatch } from "../context/TodoContext";
 
 export default function TodoInput(): React.JSX.Element {
@@ -20,7 +20,7 @@ export default function TodoInput(): React.JSX.Element {
 
   const handleClickCreate = () => {
     if (todoText && dispatch) {
-      let temp: TodoItem = {
+      let temp: TodoItemType = {
         Text: todoText,
         Status: TodoStatus.New,
       };

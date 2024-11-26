@@ -1,19 +1,19 @@
 import React, { useContext, useReducer } from "react";
 import {
-  TodoItem,
+  TodoItemType,
   TodoItemDispatch,
   TodoItemDispatchType,
   TodoStatus,
 } from "../types/TodoItemType";
 
-export const TodosContext = React.createContext<Array<TodoItem> | null>(null);
+export const TodosContext = React.createContext<Array<TodoItemType> | null>(null);
 export const TodoDispatchContext =
   React.createContext<React.Dispatch<TodoItemDispatch> | null>(null);
 
 const storedTodos = JSON.parse(
   localStorage.getItem("todos") ?? "[]"
-) as TodoItem[];
-const initialTodos: TodoItem[] =
+) as TodoItemType[];
+const initialTodos: TodoItemType[] =
   storedTodos.length > 0
     ? storedTodos
     : [{ Id: 0, Text: "Your first Todo! :) ", Status: TodoStatus.New }];
@@ -38,9 +38,9 @@ export function useTodosDispatch() {
   return useContext(TodoDispatchContext);
 }
 
-function todosReducer(todos: TodoItem[], action: TodoItemDispatch): TodoItem[] {
+function todosReducer(todos: TodoItemType[], action: TodoItemDispatch): TodoItemType[] {
   const { todo } = action;
-  let updatedTodos: TodoItem[];
+  let updatedTodos: TodoItemType[];
   switch (action.type) {
     case TodoItemDispatchType.added:
       updatedTodos = [
