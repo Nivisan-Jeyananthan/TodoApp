@@ -18,6 +18,8 @@ Are you tired of forgetting important tasks or losing track of your daily goals?
 Get started today and transform the way you manage your tasks.   
 With our Todo App, you’ll achieve more and stress less. Let’s make productivity your new best friend!
 
+![image](https://github.com/user-attachments/assets/19033835-8955-487e-9095-fc53334c2ccd)
+
 # Get it running! 
 ## Prerequisites 
 - Docker
@@ -34,4 +36,5 @@ With our Todo App, you’ll achieve more and stress less. Let’s make productiv
 This application is currently a proof of concept (POC). It is intended to demonstrate the potential features and capabilities of a todo app. While fully functional, it may not include all features or optimizations of a production-ready application.
 
 Get started today and transform the way you manage your tasks. With our Todo App, you’ll achieve more and stress less. Let’s make productivity your new best friend!
+
 
