@@ -23,7 +23,7 @@ With our Todo App, you’ll achieve more and stress less. Let’s make productiv
 # Get it running! 
 ## Prerequisites 
 - Docker
-- At least 30mb free of memory
+- At least 10mb free of memory
 
 ## Building for Beginners
 1. Open a terminal with sudo permissions
