@@ -1,8 +1,9 @@
-import React, { useContext } from "react";
+import { useContext } from "react";
+import type { JSX } from "react";
 import TodoRow from "./TodoRow";
 import { TodosContext } from "../context/TodoContext";
 
-export default function TodoList(): React.JSX.Element {
+export default function TodoList(): JSX.Element {
   const todos = useContext(TodosContext);
 
   return (

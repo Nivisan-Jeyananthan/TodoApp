@@ -1,18 +1,23 @@
-import React, { useState } from "react";
-import { TodoItemType, TodoItemDispatchType, TodoStatus } from "../types/TodoItemType";
+import { useState, ChangeEvent, KeyboardEvent } from "react";
+import type { JSX } from "react";
+import {
+  TodoItemType,
+  TodoItemDispatchType,
+  TodoStatus,
+} from "../types/TodoItemType";
 import { useTodosDispatch } from "../context/TodoContext";
 
-export default function TodoInput(): React.JSX.Element {
+export default function TodoInput(): JSX.Element {
   const [todoText, setTodoText] = useState<string>("");
   const dispatch = useTodosDispatch();
 
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     if (event?.target?.value.length >= 0) {
       setTodoText(event?.target?.value);
     }
   };
 
-  const handleKeyDownEnter = (event: React.KeyboardEvent) => {
+  const handleKeyDownEnter = (event: KeyboardEvent) => {
     if (event.key === "Enter") {
       handleClickCreate();
     }

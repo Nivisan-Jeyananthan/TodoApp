@@ -1,14 +1,11 @@
-import React, { useContext, useReducer } from "react";
-import {
-  TodoItemType,
-  TodoItemDispatch,
-  TodoItemDispatchType,
-  TodoStatus,
-} from "../types/TodoItemType";
+import { useContext, useReducer, createContext, Dispatch } from "react";
+import { TodoStatus, TodoItemDispatchType } from "../types/TodoItemType";
+import type { TodoItemType, TodoItemDispatch } from "../types/TodoItemType";
+import type { ReactNode } from "react";
 
-export const TodosContext = React.createContext<Array<TodoItemType> | null>(null);
+export const TodosContext = createContext<Array<TodoItemType> | null>(null);
 export const TodoDispatchContext =
-  React.createContext<React.Dispatch<TodoItemDispatch> | null>(null);
+  createContext<Dispatch<TodoItemDispatch> | null>(null);
 
 const storedTodos = JSON.parse(
   localStorage.getItem("todos") ?? "[]"
@@ -18,7 +15,7 @@ const initialTodos: TodoItemType[] =
     ? storedTodos
     : [{ Id: 0, Text: "Your first Todo! :) ", Status: TodoStatus.New }];
 
-export function TodosProvider(props: { children: React.ReactNode }) {
+export function TodosProvider(props: { children: ReactNode }) {
   const [todos, dispatch] = useReducer(todosReducer, initialTodos);
 
   return (
@@ -38,7 +35,10 @@ export function useTodosDispatch() {
   return useContext(TodoDispatchContext);
 }
 
-function todosReducer(todos: TodoItemType[], action: TodoItemDispatch): TodoItemType[] {
+function todosReducer(
+  todos: TodoItemType[],
+  action: TodoItemDispatch
+): TodoItemType[] {
   const { todo } = action;
   let updatedTodos: TodoItemType[];
   switch (action.type) {

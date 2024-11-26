@@ -1,19 +1,12 @@
-import React, { useState } from "react";
-import { TodoItemType, TodoItemDispatchType, TodoStatus } from "../types/TodoItemType";
+import { useState, memo } from "react";
+import { TodoItemDispatchType, TodoStatus } from "../types/TodoItemType";
+import type { TodoItemType } from "../types/TodoItemType";
 import { useTodosDispatch } from "../context/TodoContext";
+import { formattedEndDate } from "../utils/DateUtils";
 
 interface ITodoRow {
   todo: TodoItemType;
 }
-
-const formattedEndDate = (d: Date) =>
-  d.toLocaleDateString("de-CH", {
-    year: "2-digit",
-    month: "2-digit",
-    day: "2-digit",
-    hour: "2-digit",
-    minute: "2-digit",
-  });
 
 interface ITodoRow {
   todo: TodoItemType;
@@ -67,4 +60,4 @@ function TodoRow(props: ITodoRow): JSX.Element {
   );
 }
 
-export default React.memo(TodoRow);
+export default memo(TodoRow);
