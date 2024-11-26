@@ -8,7 +8,7 @@ export const TodoDispatchContext =
   createContext<Dispatch<TodoItemDispatch> | null>(null);
 
 const storedTodos = JSON.parse(
-  localStorage.getItem("todos") ?? "[]"
+  localStorage.getItem("todos") ?? "[]",
 ) as TodoItemType[];
 const initialTodos: TodoItemType[] =
   storedTodos.length > 0
@@ -37,7 +37,7 @@ export function useTodosDispatch() {
 
 function todosReducer(
   todos: TodoItemType[],
-  action: TodoItemDispatch
+  action: TodoItemDispatch,
 ): TodoItemType[] {
   const { todo } = action;
   let updatedTodos: TodoItemType[];

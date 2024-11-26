@@ -15,11 +15,11 @@ interface ITodoRow {
 function TodoRow(props: ITodoRow): JSX.Element {
   const { todo } = props;
   const [todoStatus, setTodoStatus] = useState<boolean>(
-    todo.Status === TodoStatus.Done
+    todo.Status === TodoStatus.Done,
   );
   const dispatch = useTodosDispatch();
 
-  const handleCheck = (_: React.ChangeEvent<HTMLInputElement>) => {
+  const handleCheck = () => {
     const newStatus = !todoStatus;
     setTodoStatus(newStatus);
     if (dispatch) {

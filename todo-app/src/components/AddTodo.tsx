@@ -25,7 +25,7 @@ export default function TodoInput(): JSX.Element {
 
   const handleClickCreate = () => {
     if (todoText && dispatch) {
-      let temp: TodoItemType = {
+      const temp: TodoItemType = {
         Text: todoText,
         Status: TodoStatus.New,
       };

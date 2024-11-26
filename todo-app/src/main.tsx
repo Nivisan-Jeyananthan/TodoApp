@@ -6,5 +6,5 @@ import TodoApp from "./components/TodoApp.tsx";
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <TodoApp />
-  </StrictMode>
+  </StrictMode>,
 );

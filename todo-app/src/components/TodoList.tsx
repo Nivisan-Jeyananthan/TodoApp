@@ -8,11 +8,7 @@ export default function TodoList(): JSX.Element {
 
   return (
     <table>
-      <tbody>
-        {todos?.map((x) => (
-          <TodoRow key={x.Id} todo={x} />
-        ))}
-      </tbody>
+      <tbody>{todos?.map((x) => <TodoRow key={x.Id} todo={x} />)}</tbody>
     </table>
   );
 }

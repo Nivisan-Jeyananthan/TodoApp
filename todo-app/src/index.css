@@ -83,7 +83,9 @@ button {
   font-family: inherit;
   background-color: #1a1a1a;
   cursor: pointer;
-  transition: border-color 0.25s, background-color 0.25s;
+  transition:
+    border-color 0.25s,
+    background-color 0.25s;
 }
 button:hover {
   border-color: var(--primary-color);
@@ -121,7 +123,9 @@ input[type="text"] {
   font-size: 1rem; /* Ensure font size matches other elements */
   background-color: #fff; /* Ensure a light background for better readability */
   color: var(--text-color-light); /* Text color */
-  transition: border-color 0.25s, box-shadow 0.25s; /* Smooth transition effects */
+  transition:
+    border-color 0.25s,
+    box-shadow 0.25s; /* Smooth transition effects */
 }
 
 input[type="text"]:focus {
