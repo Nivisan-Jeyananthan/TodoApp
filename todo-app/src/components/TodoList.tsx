@@ -7,19 +7,9 @@ export default function TodoList(): React.JSX.Element {
 
   return (
     <table>
-      <thead>
-        <tr>
-          <th scope="col">Name</th>
-          <th scope="col">Status</th>
-          <th scope="col">Date</th>
-          <th scope="col">Delete</th>
-        </tr>
-      </thead>
       <tbody>
         {todos?.map((x) => (
-          <tr key={x.Id}>
-            <TodoRow todo={x} />
-          </tr>
+          <TodoRow key={x.Id} todo={x} />
         ))}
       </tbody>
     </table>

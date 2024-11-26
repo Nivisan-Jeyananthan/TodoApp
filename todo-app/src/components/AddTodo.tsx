@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { TodoItem, TodoItemDispatchType, TodoStatus } from "../types/TodoItem";
+import { TodoItem, TodoItemDispatchType, TodoStatus } from "../types/TodoItemType";
 import { useTodosDispatch } from "../context/TodoContext";
 
 export default function TodoInput(): React.JSX.Element {

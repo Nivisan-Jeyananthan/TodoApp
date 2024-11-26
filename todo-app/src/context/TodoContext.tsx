@@ -4,7 +4,7 @@ import {
   TodoItemDispatch,
   TodoItemDispatchType,
   TodoStatus,
-} from "../types/TodoItem";
+} from "../types/TodoItemType";
 
 export const TodosContext = React.createContext<Array<TodoItem> | null>(null);
 export const TodoDispatchContext =

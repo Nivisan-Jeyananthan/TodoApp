@@ -140,7 +140,6 @@ input[type="text"]:focus {
 
 table {
   table-layout: fixed;
-  width: auto;
   text-align: center;
   border-collapse: collapse; /* Ensures that padding works as expected */
   min-width: 50rem; /* Set the minimum width of the table */
@@ -150,6 +149,7 @@ table th,
 table td {
   padding: 0.5rem 1rem; /* Adjust the padding values as needed */
   border: 1px solid #ccc; /* Add border for better separation */
+  width: 25%; /* Ensure each cell takes up an equal portion of the table width */
 }
 
 /* Apply a larger size to checkboxes */
@@ -158,4 +158,11 @@ input[type="checkbox"] {
   height: 1.5rem;
   cursor: pointer; /* Ensures the cursor changes to a pointer for better UX */
   margin-right: 0.5rem; /* Adds space between checkbox and label */
+}
+
+/* Styles for completed todo items */
+.todo-done {
+  text-decoration: line-through; /* Strikes through the text */
+  background-color: #464646;
+  color: #aaaaaa; /* Change text color for contrast */
 }

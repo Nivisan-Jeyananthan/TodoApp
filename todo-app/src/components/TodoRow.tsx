@@ -1,9 +1,9 @@
 import React, { useState } from "react";
-import { TodoItem, TodoItemDispatchType, TodoStatus } from "../types/TodoItem";
+import { TodoItemType, TodoItemDispatchType, TodoStatus } from "../types/TodoItemType";
 import { useTodosDispatch } from "../context/TodoContext";
 
 interface ITodoRow {
-  todo: TodoItem;
+  todo: TodoItemType;
 }
 
 const formattedEndDate = (d: Date) =>
@@ -14,6 +14,10 @@ const formattedEndDate = (d: Date) =>
     hour: "2-digit",
     minute: "2-digit",
   });
+
+interface ITodoRow {
+  todo: TodoItemType;
+}
 
 function TodoRow(props: ITodoRow): JSX.Element {
   const { todo } = props;
@@ -26,7 +30,7 @@ function TodoRow(props: ITodoRow): JSX.Element {
     const newStatus = !todoStatus;
     setTodoStatus(newStatus);
     if (dispatch) {
-      const updatedTodo: TodoItem = {
+      const updatedTodo: TodoItemType = {
         ...todo,
         Status: newStatus ? TodoStatus.Done : TodoStatus.New,
       };
@@ -41,8 +45,8 @@ function TodoRow(props: ITodoRow): JSX.Element {
   };
 
   return (
-    <>
-      <td scope="row">{todo.Text}</td>
+    <tr key={todo.Id} className={todoStatus ? "todo-done" : ""}>
+      <td>{todo.Text}</td>
       <td>
         <input
           type="checkbox"
@@ -59,7 +63,7 @@ function TodoRow(props: ITodoRow): JSX.Element {
           ¯\_(ツ)_/¯
         </button>
       </td>
-    </>
+    </tr>
   );
 }
 
