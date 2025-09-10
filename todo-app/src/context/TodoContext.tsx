@@ -7,13 +7,17 @@ export const TodosContext = createContext<Array<TodoItemType> | null>(null);
 export const TodoDispatchContext =
   createContext<Dispatch<TodoItemDispatch> | null>(null);
 
-const storedTodos = JSON.parse(
-  localStorage.getItem("todos") ?? "[]",
-) as TodoItemType[];
+// Load stored todos and revive Dates
+const _raw = localStorage.getItem("todos");
+const _parsed = _raw ? (JSON.parse(_raw) as any[]) : [];
+const storedTodos: TodoItemType[] = _parsed.map((t) => ({
+  ...t,
+  EndsAt: t?.EndsAt ? new Date(t.EndsAt) : undefined,
+}));
 const initialTodos: TodoItemType[] =
   storedTodos.length > 0
     ? storedTodos
-    : [{ Id: 0, Text: "Your first Todo! :) ", Status: TodoStatus.New }];
+    : [{ Id: crypto.randomUUID(), Text: "Your first Todo! :) ", Status: TodoStatus.New }];
 
 export function TodosProvider(props: { children: ReactNode }) {
   const [todos, dispatch] = useReducer(todosReducer, initialTodos);
@@ -43,26 +47,46 @@ function todosReducer(
   let updatedTodos: TodoItemType[];
   switch (action.type) {
     case TodoItemDispatchType.added:
-      updatedTodos = [
-        ...todos,
-        { Id: Math.random(), Text: todo.Text, Status: todo.Status, EndsAt: todo.EndsAt },
-      ];
+      const newTodo: TodoItemType = {
+        Id: todo?.Id ?? crypto.randomUUID(),
+        Text: todo?.Text ?? "",
+        Status: todo?.Status ?? TodoStatus.New,
+        ParentId: (todo as any)?.ParentId,
+        EndsAt: todo?.EndsAt ? (todo.EndsAt instanceof Date ? todo.EndsAt : new Date(todo.EndsAt)) : undefined,
+      };
+      updatedTodos = [...todos, newTodo];
       break;
     case TodoItemDispatchType.changed:
       updatedTodos = todos.map((t) => {
         if (t.Id === todo?.Id) {
-          return todo;
+          return todo as TodoItemType;
         }
         return t;
       });
       break;
     case TodoItemDispatchType.deleted:
-      updatedTodos = todos.filter((t) => t?.Id !== todo?.Id);
+      if (!todo?.Id) {
+        updatedTodos = todos;
+        break;
+      }
+      // collect id and all descendants
+      const idsToRemove = new Set<string>();
+      const collect = (id: string) => {
+        idsToRemove.add(id);
+        todos.forEach((tt) => {
+          if (tt.ParentId === id && !idsToRemove.has(tt.Id)) collect(tt.Id);
+        });
+      };
+      collect(todo.Id);
+      updatedTodos = todos.filter((t) => !idsToRemove.has(t.Id));
       break;
     default:
       throw new Error("Unknown operation ?:\n " + action.type);
-  } // Save updated todos to local storage
+  }
 
+  // Save updated todos to local storage (Dates will be serialized to ISO strings)
   localStorage.setItem("todos", JSON.stringify(updatedTodos));
   return updatedTodos;
 }
+
+

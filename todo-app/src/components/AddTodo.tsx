@@ -8,7 +8,12 @@ import {
 import { useTodosDispatch } from "../context/TodoContext";
 import NumberInput from "./NumberInput";
 
-export default function TodoInput(): JSX.Element {
+interface ITodoInputProps{
+  parentId?: string;
+  onCreated?: () => void;
+}
+
+export default function TodoInput(props: ITodoInputProps): JSX.Element {
   const [doneIn, setDoneIn] = useState<number>(0);
   const [todoText, setTodoText] = useState<string>("");
   const dispatch = useTodosDispatch();
@@ -28,16 +33,17 @@ export default function TodoInput(): JSX.Element {
   const handleClickCreate = () => {
     if (todoText && dispatch) {
       const temp: TodoItemType = {
+        Id: crypto.randomUUID(), 
         Text: todoText,
         Status: TodoStatus.New,
-        EndsAt: doneIn
-          ? new Date(Date.now() + doneIn * 60 * 60 * 1000)
-          : undefined
+        ParentId: props.parentId,
+        EndsAt: doneIn ? new Date(Date.now() + doneIn * 60 * 60 * 1000) : undefined
       };
 
-      console.log("Current time:", new Date().toISOString());
-      console.table(temp);
       dispatch({ type: TodoItemDispatchType.added, todo: temp });
+      setTodoText("");
+      setDoneIn(0);
+      props.onCreated?.();
     }
   };
 

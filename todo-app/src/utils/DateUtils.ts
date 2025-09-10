@@ -1,3 +1,4 @@
+// Utility function to format a Date object into a string "dd.MM.yy HH:mm"
 export const formattedEndDate = (d: Date) =>
 {
   if (d == null) return "";

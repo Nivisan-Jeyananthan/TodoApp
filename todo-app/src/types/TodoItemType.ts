@@ -1,8 +1,9 @@
 export type TodoItemType = {
-  Id?: number;
+  Id: string;
   Text?: string;
   Status?: TodoStatus;
   EndsAt?: Date;
+  ParentId?: string;
 };
 
 export type TodoItemKeys = keyof TodoItemType;
