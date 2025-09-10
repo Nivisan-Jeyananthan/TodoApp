@@ -6,8 +6,10 @@ import {
   TodoStatus,
 } from "../types/TodoItemType";
 import { useTodosDispatch } from "../context/TodoContext";
+import NumberInput from "./NumberInput";
 
 export default function TodoInput(): JSX.Element {
+  const [doneIn, setDoneIn] = useState<number>(0);
   const [todoText, setTodoText] = useState<string>("");
   const dispatch = useTodosDispatch();
 
@@ -28,13 +30,20 @@ export default function TodoInput(): JSX.Element {
       const temp: TodoItemType = {
         Text: todoText,
         Status: TodoStatus.New,
+        EndsAt: doneIn
+          ? new Date(Date.now() + doneIn * 60 * 60 * 1000)
+          : undefined
       };
+
+      console.log("Current time:", new Date().toISOString());
+      console.table(temp);
       dispatch({ type: TodoItemDispatchType.added, todo: temp });
     }
   };
 
   return (
     <div className="todo-input">
+      
       <input
         autoFocus={true}
         type="text"
@@ -43,6 +52,8 @@ export default function TodoInput(): JSX.Element {
         onKeyDown={handleKeyDownEnter}
         placeholder="Get a little creative :D"
       />
+      <NumberInput value={doneIn} onChange={setDoneIn} placeholder="Done in (hours)" min={0} max={365} />
+
       <button onClick={handleClickCreate}>Create</button>
     </div>
   );

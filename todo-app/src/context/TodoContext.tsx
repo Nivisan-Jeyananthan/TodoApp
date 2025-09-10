@@ -45,7 +45,7 @@ function todosReducer(
     case TodoItemDispatchType.added:
       updatedTodos = [
         ...todos,
-        { Id: Math.random(), Text: todo.Text, Status: todo.Status },
+        { Id: Math.random(), Text: todo.Text, Status: todo.Status, EndsAt: todo.EndsAt },
       ];
       break;
     case TodoItemDispatchType.changed:
