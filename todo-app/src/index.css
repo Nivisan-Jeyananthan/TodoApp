@@ -222,13 +222,10 @@ table {
 }
 
 .todo-table {
-  width: 100%;
+  width: 45vw;;
   border-collapse: collapse;
-  max-width: 720px;
   border: 1px solid #ffffff; /* white outline */
-  border-radius: 6px;
-  overflow: hidden;
-  box-shadow: 0 6px 18px rgba(0,0,0,0.12);
+  border-radius: 0;
 }
 
 .todo-table th, .todo-table td {
@@ -309,17 +306,14 @@ table {
 }
 
 .todo-text, .child-text {
-  display: inline-block;
-  max-width: 48ch;
-  overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
+  white-space: wrap;
+  word-break: break-word;
 }
 
 /* Done styling */
 .todo-done {
   text-decoration: line-through;
-  opacity: 0.7;
+  opacity: 0.3;
 }
 
 /* Buttons */
@@ -342,28 +336,28 @@ table {
   background: transparent;
   border: 1px solid rgba(255,90,100,0.12);
   color: var(--danger);
-  padding: 6px 8px;
-  border-radius: 6px;
+  padding: 0.5rem 0.8rem;
+  border-radius: 0.3rem;
 }
 .delete-btn:hover { background: rgba(255,92,108,0.06); }
 
 /* Inline input */
 .inline-input {
-  padding: 6px 8px;
+  padding: 0.4rem 0.5rem;
   border-radius: 6px;
   border: 1px solid rgba(255,255,255,0.06);
   background: rgba(0,0,0,0.18);
   color: inherit;
-  min-width: 200px;
+  min-width: 12.5rem;
 }
 .inline-input:focus { outline: none; box-shadow: 0 0 0 3px rgba(80,96,255,0.08); }
 
 /* Done checkbox accent */
 .done-checkbox {
-  width: 1.3rem;
-  height: 1.3rem;
+  width: 1.5rem;
+  height: 1.5rem;
   accent-color: var(--primary);
-  margin-right: 8px;
+  margin-right: 0.5rem;
 }
 
 /* Child badge */

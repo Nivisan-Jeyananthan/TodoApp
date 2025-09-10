@@ -107,6 +107,7 @@ function TodoNode({ node }: { node: TodoItemType & { children?: TodoItemType[] }
     const orig = todos.find((t) => t.Id === childId);
     if (!orig) return;
     const text = editingText.trim();
+    
     const updated: TodoItemType = { ...orig, Text: text || orig.Text };
     dispatch({ type: TodoItemDispatchType.changed, todo: updated });
     setEditingChildId(null);
