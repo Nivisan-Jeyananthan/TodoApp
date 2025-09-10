@@ -242,6 +242,7 @@ table {
 /* keep the todo text column left-aligned for readability */
 .todo-table td:first-child {
   text-align: left;
+  width: 45%; /* take up all available space */
 }
 
 .todo-table tbody tr {
@@ -276,6 +277,10 @@ table {
   transform: translateY(-1px);
 }
 
+.todo-children{
+  text-decoration: none;
+  list-style: none;
+}
 /* tree child item hover */
 .todo-child {
   transition: none;
@@ -292,6 +297,7 @@ table {
   padding: 0.35rem 0.5rem;
   border-radius: 6px;
   transition: background .12s ease, transform .08s ease;
+  list-style:none;
 }
 .todo-node .todo-row {
   align-items: center;
@@ -354,8 +360,8 @@ table {
 
 /* Done checkbox accent */
 .done-checkbox {
-  width: 1.5rem;
-  height: 1.5rem;
+  width: 1.4rem;
+  height: 1.4rem;
   accent-color: var(--primary);
   margin-right: 0.5rem;
 }

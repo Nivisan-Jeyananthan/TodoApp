@@ -35,7 +35,7 @@ export default function TodoTable(): JSX.Element {
           <tr key={r.Id} className={r.ParentId ? "child-row" : undefined}>
             <td><span className={`todo-text ${r.Status === TodoStatus.Done ? "todo-done" : ""}`}>{r.Text}</span></td>
             <td>
-              <input type="checkbox" checked={r.Status === TodoStatus.Done} onChange={() => handleToggle(r)} />
+              <input className="done-checkbox" type="checkbox" checked={r.Status === TodoStatus.Done} onChange={() => handleToggle(r)} />
             </td>
             <td>{r.EndsAt ? formattedEndDate(r.EndsAt) : "—"}</td>
             <td>
