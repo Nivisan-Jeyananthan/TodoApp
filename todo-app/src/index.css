@@ -38,6 +38,12 @@ select {
   --font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   --focus-color: rgba(100, 108, 255, 0.25);
 
+  --bg-elev: rgba(255,255,255,0.02);
+  --bg-elev-2: rgba(255,255,255,0.03);
+  --muted: rgba(255,255,255,0.6);
+  --primary: #5060ff; /* accent */
+  --danger: #ff5c6c;
+
   font-family: var(--font-family);
   line-height: 1.5;
   font-weight: 400;
@@ -215,153 +221,159 @@ table {
   min-width: 45vw; /* Set the minimum width of the table */
 }
 
-table th,
-table td {
-  padding: 0.5rem 1rem; /* Adjust the padding values as needed */
-  border: 1px solid #ccc; /* Add border for better separation */
-  width: 25%; /* Ensure each cell takes up an equal portion of the table width */
+.todo-table {
+  width: 100%;
+  border-collapse: collapse;
+  max-width: 720px;
+  border: 1px solid #ffffff; /* white outline */
+  border-radius: 6px;
+  overflow: hidden;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.12);
 }
 
-/* Apply a larger size to checkboxes */
-input[type="checkbox"] {
-  width: 1.5rem;
-  height: 1.5rem;
-  cursor: pointer; /* Ensures the cursor changes to a pointer for better UX */
-  margin-right: 0.5rem; /* Adds space between checkbox and label */
+.todo-table th, .todo-table td {
+  padding: 0.6rem 0.75rem;
+  text-align: center;
+  vertical-align: middle;
 }
 
-/* Styles for completed todo items */
+/* add vertical lines between columns */
+.todo-table td {
+  border-right: 1px solid #ffffff;
+}
+
+/* keep the todo text column left-aligned for readability */
+.todo-table td:first-child {
+  text-align: left;
+}
+
+.todo-table tbody tr {
+  border-bottom: 1px solid #ffffff; /* white divider between rows */
+}
+
+.todo-table tbody tr:hover {
+   background: rgba(80, 95, 255, 0.185);
+}
+
+.child-row td:first-child {
+  padding-left: 2.25rem; /* increased indent for table child rows to match tree */
+  position: relative;
+}
+.child-row td:first-child::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 12%;
+  bottom: 12%;
+  width: 4px;
+  background: linear-gradient(180deg, rgba(255,255,255,0.12), rgba(255,255,255,0.06));
+  border-radius: 2px;
+}
+.child-row {
+  background: rgba(255,255,255,0.02); /* subtle background to indicate child */
+}
+
+/* stronger hover for child rows (table) */
+.child-row:hover {
+  background: rgba(80, 95, 255, 0.185);
+  transform: translateY(-1px);
+}
+
+/* tree child item hover */
+.todo-child {
+  transition: none;
+  border-radius: 6px;
+}
+.todo-child:hover {
+  background: none;
+  transform: none;
+  cursor: default;
+}
+
+/* Todo node visual polish */
+.todo-node {
+  padding: 0.35rem 0.5rem;
+  border-radius: 6px;
+  transition: background .12s ease, transform .08s ease;
+}
+.todo-node .todo-row {
+  align-items: center;
+}
+.todo-node:hover {
+  background: none;
+  transform: none;
+}
+.todo-node.drag-over {
+  background: rgba(80,96,255,0.06);
+  box-shadow: 0 4px 14px rgba(80,96,255,0.06);
+}
+
+.todo-text, .child-text {
+  display: inline-block;
+  max-width: 48ch;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+/* Done styling */
 .todo-done {
-  text-decoration: line-through; /* Strikes through the text */
+  text-decoration: line-through;
   opacity: 0.7;
 }
 
-.todo-root-list {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  width: 100%;
-  max-width: 720px;
+/* Buttons */
+.btn {
+  background: transparent;
+  border: 1px solid rgba(255,255,255,0.06);
+  color: inherit;
+  padding: 6px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background .12s ease, transform .06s ease;
 }
-
-.todo-node {
-  padding: 0.5rem;
-  border-bottom: 1px solid rgba(255,255,255,0.04);
+.btn:hover { background: var(--bg-elev-2); transform: translateY(-1px); }
+.btn.primary {
+  background: linear-gradient(180deg, var(--primary), #3340d6);
+  border: none;
+  color: white;
 }
-
-.todo-row .todo-text {
-  font-weight: 500;
+.delete-btn {
+  background: transparent;
+  border: 1px solid rgba(255,90,100,0.12);
+  color: var(--danger);
+  padding: 6px 8px;
+  border-radius: 6px;
 }
+.delete-btn:hover { background: rgba(255,92,108,0.06); }
 
-.todo-children {
-  list-style: none;
-  padding-left: 1.5rem; /* indent children */
-  margin: 0.25rem 0 0 0;
+/* Inline input */
+.inline-input {
+  padding: 6px 8px;
+  border-radius: 6px;
+  border: 1px solid rgba(255,255,255,0.06);
+  background: rgba(0,0,0,0.18);
+  color: inherit;
+  min-width: 200px;
 }
+.inline-input:focus { outline: none; box-shadow: 0 0 0 3px rgba(80,96,255,0.08); }
 
-.todo-child {
-  display: flex;
-  gap: 8px;
-  align-items: center;
-  padding: 0.25rem 0;
-}
-
-.child-badge {
-  color: rgba(255,255,255,0.5);
-  margin-right: 4px;
-}
-
-.child-text {
+/* Done checkbox accent */
+.done-checkbox {
+  width: 1.3rem;
+  height: 1.3rem;
+  accent-color: var(--primary);
   margin-right: 8px;
 }
 
-.group-bar {
-  margin-bottom: 0.75rem;
-}
-.group-controls {
-  display: flex;
-  gap: 0.5rem;
+/* Child badge */
+.child-badge {
+  display: inline-flex;
   align-items: center;
-}
-.group-label {
-  display: flex;
-  flex-direction: column;
-  font-size: 0.85rem;
-}
-.group-label select {
-  margin-top: 0.25rem;
-  padding: 0.25rem 0.5rem;
-  border-radius: 0.35rem;
-  border: 1px solid #444;
-  background: #111;
-  color: #fff;
-}
-.group-hint {
-  color: rgba(255,255,255,0.6);
-}
-
-.btn {
-  padding: 0.4rem 0.6rem;
-  border-radius: 0.35rem;
-  border: 1px solid transparent;
-  background: #2a2a2a;
-  color: #fff;
-  cursor: pointer;
-}
-.btn.primary {
-  background: var(--primary-color);
-  color: #fff;
-}
-
-.delete-btn {
-  background: transparent;
-  color: #ff6b6b;
-  border: 1px solid rgba(255,107,107,0.12);
-  padding: 0.25rem 0.5rem;
-  border-radius: 0.35rem;
-  cursor: pointer;
-}
-.delete-btn:hover {
-  background: rgba(255,107,107,0.06);
-}
-
-.todo-end-date {
-  margin-left: 0.75rem;
-  color: rgba(255,255,255,0.55);
-  font-size: 0.85rem;
-}
-
-.select-checkbox {
-  width: 1.1rem;
-  height: 1.1rem;
-}
-
-/* make the done checkbox more prominent and colored when checked */
-.done-checkbox {
+  justify-content: center;
   width: 1.2rem;
   height: 1.2rem;
-  accent-color: var(--primary-color);
-}
-
-/* For older browsers or more custom visuals, transform into a faux toggle */
-.done-checkbox.custom {
-  appearance: none;
-  width: 1.6rem;
-  height: 1.6rem;
-  border-radius: 0.35rem;
-  border: 1px solid rgba(255,255,255,0.12);
-  background: transparent;
-  position: relative;
-}
-.done-checkbox.custom:checked {
-  background: var(--primary-color);
-  border-color: var(--primary-color);
-}
-.done-checkbox.custom:checked::after {
-  content: '\2713';
-  color: white;
-  position: absolute;
-  left: 0.35rem;
-  top: 0.06rem;
-  font-size: 0.9rem;
+  margin-right: 0.3rem;
+  color: rgba(255,255,255,0.75);
+  opacity: 0.9;
 }
