@@ -1,4 +1,4 @@
-import { useState, useCallback, memo, type JSX } from "react";
+import { useState, useCallback, memo, useEffect, type JSX } from "react";
 import type { TodoItemType } from "../types/TodoItemType";
 import { TodoStatus, TodoItemDispatchType } from "../types/TodoItemType";
 import { useTodos, useTodosDispatch } from "../context/TodoContext";
@@ -69,16 +69,12 @@ function TodoNode({ node }: { node: TodoItemType & { children?: TodoItemType[] }
   const [editingChildId, setEditingChildId] = useState<string | null>(null);
   const [editingText, setEditingText] = useState("");
   const [isDragOver, setIsDragOver] = useState(false);
+  const [collapsed, setCollapsed] = useState(false);
 
   const todos = useTodos() ?? [];
   const dispatch = useTodosDispatch();
 
   const isDone = node.Status === TodoStatus.Done;
-
-  const handleDelete = useCallback((id: string) => {
-    if (!dispatch) return;
-    dispatch({ type: TodoItemDispatchType.deleted, todo: { Id: id } as any });
-  }, [dispatch]);
 
   const setStatus = useCallback((id: string, status: TodoStatus) => {
     if (!dispatch) return;
@@ -86,6 +82,30 @@ function TodoNode({ node }: { node: TodoItemType & { children?: TodoItemType[] }
     const updated = orig ? { ...orig, Status: status } : ({ Id: id, Status: status } as any);
     dispatch({ type: TodoItemDispatchType.changed, todo: updated as any });
   }, [dispatch, todos]);
+
+  // Auto-update parent status when all children are done (or unmark when any child undone)
+  useEffect(() => {
+    if (!dispatch) return;
+    // gather latest children statuses from global todos
+    const childrenStatuses = todos.filter((t) => t.ParentId === node.Id).map((t) => t.Status);
+    if (childrenStatuses.length === 0) return;
+    const allDone = childrenStatuses.every((s) => s === TodoStatus.Done);
+    const parentIsDone = node.Status === TodoStatus.Done;
+    if (allDone && !parentIsDone) {
+      // mark parent done
+      setStatus(node.Id, TodoStatus.Done);
+    } else if (!allDone && parentIsDone) {
+      // unmark parent
+      setStatus(node.Id, TodoStatus.New);
+    }
+  // only react to changes in todos or node status
+  }, [todos, node.Id, node.Status, dispatch, setStatus]);
+
+  const handleDelete = useCallback((id: string) => {
+    if (!dispatch) return;
+    dispatch({ type: TodoItemDispatchType.deleted, todo: { Id: id } as any });
+  }, [dispatch]);
+
 
   const toggleDoneParent = useCallback(() => {
     const willBeDone = node.Status !== TodoStatus.Done;
@@ -158,6 +178,10 @@ function TodoNode({ node }: { node: TodoItemType & { children?: TodoItemType[] }
       onDrop={onDrop}
     >
       <div className="todo-row" style={{ display: "flex", gap: 8, alignItems: "center" }}>
+        <button className="btn" onClick={() => setCollapsed((s) => !s)} aria-label={collapsed ? "Expand children" : "Collapse children"}>
+          {collapsed ? "▸" : "▾"}
+        </button>
+
         <input className="done-checkbox" aria-label={isDone ? "Mark as not done" : "Mark as done"} type="checkbox" checked={isDone} onChange={toggleDoneParent} />
 
         <span className={`todo-text ${isDone ? "todo-done" : ""}`}>{node.Text}</span>
@@ -169,7 +193,7 @@ function TodoNode({ node }: { node: TodoItemType & { children?: TodoItemType[] }
         </div>
       </div>
 
-      {node.children && node.children.length > 0 && (
+      {node.children && node.children.length > 0 && !collapsed && (
         <ul className="todo-children">
           {node.children.map((c) => (
             <ChildRow

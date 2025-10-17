@@ -17,7 +17,13 @@ const storedTodos: TodoItemType[] = _parsed.map((t) => ({
 const initialTodos: TodoItemType[] =
   storedTodos.length > 0
     ? storedTodos
-    : [{ Id: crypto.randomUUID(), Text: "Your first Todo! :) ", Status: TodoStatus.New }];
+    : [
+        {
+          Id: crypto.randomUUID(),
+          Text: "Your first Todo! :) ",
+          Status: TodoStatus.New,
+        },
+      ];
 
 export function TodosProvider(props: { children: ReactNode }) {
   const [todos, dispatch] = useReducer(todosReducer, initialTodos);
@@ -52,7 +58,11 @@ function todosReducer(
         Text: todo?.Text ?? "",
         Status: todo?.Status ?? TodoStatus.New,
         ParentId: (todo as any)?.ParentId,
-        EndsAt: todo?.EndsAt ? (todo.EndsAt instanceof Date ? todo.EndsAt : new Date(todo.EndsAt)) : undefined,
+        EndsAt: todo?.EndsAt
+          ? todo.EndsAt instanceof Date
+            ? todo.EndsAt
+            : new Date(todo.EndsAt)
+          : undefined,
       };
       updatedTodos = [...todos, newTodo];
       break;
@@ -69,7 +79,6 @@ function todosReducer(
         updatedTodos = todos;
         break;
       }
-      // collect id and all descendants
       const idsToRemove = new Set<string>();
       const collect = (id: string) => {
         idsToRemove.add(id);
@@ -80,6 +89,20 @@ function todosReducer(
       collect(todo.Id);
       updatedTodos = todos.filter((t) => !idsToRemove.has(t.Id));
       break;
+    case TodoItemDispatchType.replaced:
+      if (action.todos && Array.isArray(action.todos)) {
+        updatedTodos = action.todos.map((t) => ({
+          ...t,
+          EndsAt: t?.EndsAt
+            ? t.EndsAt instanceof Date
+              ? t.EndsAt
+              : new Date(t.EndsAt)
+            : undefined,
+        }));
+      } else {
+        updatedTodos = todos;
+      }
+      break;
     default:
       throw new Error("Unknown operation ?:\n " + action.type);
   }
@@ -88,5 +111,3 @@ function todosReducer(
   localStorage.setItem("todos", JSON.stringify(updatedTodos));
   return updatedTodos;
 }
-
-

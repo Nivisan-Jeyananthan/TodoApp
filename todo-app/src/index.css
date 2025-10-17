@@ -292,6 +292,37 @@ table {
   cursor: default;
 }
 
+/* Indent child items to make hierarchy clearer */
+.todo-children {
+  padding-left: 1.5rem; /* increased indentation for child lists */
+}
+.todo-child {
+  margin-left: 0.6rem; /* small offset so child items sit under the parent */
+  padding-left: 0.25rem;
+}
+
+/* Modal overlay and dialog for Import/Replace confirmation */
+.modal-overlay {
+  position: fixed;
+  inset: 0; /* top:0; right:0; bottom:0; left:0 */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0,0,0,0.5);
+  z-index: 10000;
+}
+.modal {
+  background: var(--background-color-dark);
+  color: inherit;
+  padding: 1rem 1.25rem;
+  border-radius: 8px;
+  width: min(92%, 42rem);
+  box-shadow: 0 12px 40px rgba(0,0,0,0.6);
+  border: 1px solid rgba(255,255,255,0.04);
+}
+.modal h3 { margin: 0 0 0.5rem 0; }
+.modal p { margin: 0; }
+
 /* Todo node visual polish */
 .todo-node {
   padding: 0.35rem 0.5rem;
