@@ -4,6 +4,7 @@ import { useTodos, useTodosDispatch } from "../context/TodoContext";
 import { TodoItemDispatchType } from "../types/TodoItemType";
 import type { TodoItemType } from "../types/TodoItemType";
 import Modal from "./Modal";
+import { FileUtils } from "../utils/FileUtils";
 
 export default function ImportExport(): JSX.Element {
   const todos = useTodos() ?? [];
@@ -20,21 +21,36 @@ export default function ImportExport(): JSX.Element {
   const [dragActive, setDragActive] = useState(false);
   const [importError, setImportError] = useState<string | null>(null);
 
-  const onExport = () => {
-    try {
-      const dataStr = JSON.stringify(todos, null, 2);
-      const blob = new Blob([dataStr], { type: "application/json" });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = `todos-${new Date().toISOString()}.json`;
-      document.body.appendChild(a);
-      a.click();
-      a.remove();
-      URL.revokeObjectURL(url);
-    } catch (err) {
-      // ignore
+  const onDragOver = (e: DragEvent) => {
+    e.preventDefault();
+    setDragActive(true);
+  };
+  const onDragEnter = (e: DragEvent) => {
+    e.preventDefault();
+    setDragActive(true);
+  };
+  const onDragLeave = () => setDragActive(false);
+  const onDropGlobal = (e: DragEvent) => {
+    e.preventDefault();
+    setDragActive(false);
+    const dt = e.dataTransfer;
+    if (!dt) return;
+    const f = dt.files?.[0];
+    if (!f) return;
+    // accept JSON files
+    const name = f.name || "";
+    if (f.type === "application/json" || name.toLowerCase().endsWith(".json")) {
+      void handleFileObject(f);
+    } else {
+      setImportError("Please drop a JSON file to import todos.");
+      setPreview(null);
+      setPendingImport(null);
+      setShowConfirm(true);
     }
+  };
+
+  const onExport = () => {
+    FileUtils.handleExport(todos);
   };
 
   const onImportClick = () => {
@@ -42,116 +58,32 @@ export default function ImportExport(): JSX.Element {
   };
 
   const onFile = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const f = e.target.files?.[0];
-    if (!f) return;
-    try {
-      const text = await f.text();
-      const parsed = JSON.parse(text) as any[];
-
-      // clear previous error when parse succeeds
-      setImportError(null);
-
-      // Basic validation: array of objects with Id
-      if (!Array.isArray(parsed))
-        throw new Error("Invalid format: expected array");
-
-      const toImport = parsed.map((t) => ({ ...t }));
-      // hold off dispatching until user confirms
-      setPendingImport(toImport);
-      // compute preview
-      const existingIds = new Set(todos.map((t) => t.Id));
-      let collisions = 0;
-      for (const it of toImport)
-        if (it?.Id && existingIds.has(it.Id)) collisions++;
-
-      const total = toImport.length;
-      const newItems = total - collisions;
-
-      setPreview({
-        total,
-        collisions,
-        newItems,
-        sample: toImport.slice(0, 10),
-      });
-      setShowConfirm(true);
-    } catch (err: any) {
-      // show error in modal instead of alert
-      // eslint-disable-next-line no-console
-      console.error("Failed to import todos", err);
-      setImportError("Failed to import todos: " + (err?.message ?? "unknown"));
-      setPreview(null);
-      setPendingImport(null);
-      setShowConfirm(true);
-    } finally {
-      if (fileRef.current) fileRef.current.value = "";
-    }
+    FileUtils.handleImport(
+      e?.target?.files?.[0] ?? null,
+      setImportError,
+      setPreview,
+      setPendingImport,
+      setShowConfirm,
+      fileRef,
+      todos,
+    );
   };
 
   // helper: handle a File object (from input or drop)
   const handleFileObject = async (f: File) => {
-    if (!f) return;
-    try {
-      const text = await f.text();
-      const parsed = JSON.parse(text) as any[];
-      if (!Array.isArray(parsed)) throw new Error("Invalid format: expected array");
-      // clear any previous import error
-      setImportError(null);
-      const toImport = parsed.map((t) => ({ ...t }));
-      setPendingImport(toImport);
-      const existingIds = new Set(todos.map((t) => t.Id));
-      let collisions = 0;
-      for (const it of toImport)
-        if (it?.Id && existingIds.has(it.Id)) collisions++;
-      const total = toImport.length;
-      const newItems = total - collisions;
-      setPreview({
-        total,
-        collisions,
-        newItems,
-        sample: toImport.slice(0, 10),
-      });
-      setShowConfirm(true);
-    } catch (err: any) {
-      // show error inside modal
-      // eslint-disable-next-line no-console
-      console.error("Failed to import todos", err);
-      setImportError("Failed to import todos: " + (err?.message ?? "unknown"));
-      setPreview(null);
-      setPendingImport(null);
-      setShowConfirm(true);
-    }
+    FileUtils.handleImport(
+      f,
+      setImportError,
+      setPreview,
+      setPendingImport,
+      setShowConfirm,
+      fileRef,
+      todos,
+    );
   };
 
   // Drag & drop handlers: allow dropping a file from OS file manager
   useEffect(() => {
-    const onDragOver = (e: DragEvent) => {
-      e.preventDefault();
-      setDragActive(true);
-    };
-    const onDragEnter = (e: DragEvent) => {
-      e.preventDefault();
-      setDragActive(true);
-    };
-    const onDragLeave = () => setDragActive(false);
-    const onDropGlobal = (e: DragEvent) => {
-      e.preventDefault();
-      setDragActive(false);
-      const dt = e.dataTransfer;
-      if (!dt) return;
-      const f = dt.files?.[0];
-      if (!f) return;
-      // accept JSON files
-      const name = f.name || "";
-      if (f.type === "application/json" || name.toLowerCase().endsWith(".json")) {
-        void handleFileObject(f);
-      } else {
-        setImportError("Please drop a JSON file to import todos.");
-        setPreview(null);
-        setPendingImport(null);
-        setShowConfirm(true);
-      }
-    };
-
     window.addEventListener("dragover", onDragOver);
     window.addEventListener("dragenter", onDragEnter);
     window.addEventListener("dragleave", onDragLeave);
@@ -252,7 +184,13 @@ export default function ImportExport(): JSX.Element {
           {importError ? (
             <div>
               <p style={{ color: "red" }}>{importError}</p>
-              <div style={{ display: "flex", justifyContent: "flex-end", marginTop: 12 }}>
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "flex-end",
+                  marginTop: 12,
+                }}
+              >
                 <button onClick={cancelImport}>Close</button>
               </div>
             </div>
@@ -279,16 +217,28 @@ export default function ImportExport(): JSX.Element {
                 <ul style={{ marginTop: 6 }}>
                   {preview.sample.map((s, i) => (
                     <li key={i} style={{ fontSize: 12, opacity: 0.9 }}>
-                      {s?.Text ?? "(no text)"} <span style={{ opacity: 0.6 }}> — {s?.Id}</span>
+                      {s?.Text ?? "(no text)"}{" "}
+                      <span style={{ opacity: 0.6 }}> — {s?.Id}</span>
                     </li>
                   ))}
                 </ul>
               </div>
 
-              <div style={{ display: "flex", gap: 8, justifyContent: "flex-end", marginTop: 12 }}>
+              <div
+                style={{
+                  display: "flex",
+                  gap: 8,
+                  justifyContent: "flex-end",
+                  marginTop: 12,
+                }}
+              >
                 <button onClick={cancelImport}>Cancel</button>
-                <button className="btn" onClick={performMerge}>Merge</button>
-                <button className="btn primary" onClick={confirmImport}>Replace</button>
+                <button className="btn" onClick={performMerge}>
+                  Merge
+                </button>
+                <button className="btn primary" onClick={confirmImport}>
+                  Replace
+                </button>
               </div>
             </div>
           ) : (
