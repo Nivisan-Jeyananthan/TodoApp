@@ -8,7 +8,7 @@ import {
 import { useTodosDispatch } from "../context/TodoContext";
 import NumberInput from "./NumberInput";
 
-interface ITodoInputProps{
+interface ITodoInputProps {
   parentId?: string;
   onCreated?: () => void;
 }
@@ -33,11 +33,13 @@ export default function TodoInput(props: ITodoInputProps): JSX.Element {
   const handleClickCreate = () => {
     if (todoText && dispatch) {
       const temp: TodoItemType = {
-        Id: crypto.randomUUID(), 
+        Id: crypto.randomUUID(),
         Text: todoText,
         Status: TodoStatus.New,
         ParentId: props.parentId,
-        EndsAt: doneIn ? new Date(Date.now() + doneIn * 60 * 60 * 1000) : undefined
+        EndsAt: doneIn
+          ? new Date(Date.now() + doneIn * 60 * 60 * 1000)
+          : undefined,
       };
 
       dispatch({ type: TodoItemDispatchType.added, todo: temp });
@@ -49,7 +51,6 @@ export default function TodoInput(props: ITodoInputProps): JSX.Element {
 
   return (
     <div className="todo-input">
-      
       <input
         autoFocus={true}
         type="text"
@@ -58,7 +59,13 @@ export default function TodoInput(props: ITodoInputProps): JSX.Element {
         onKeyDown={handleKeyDownEnter}
         placeholder="Get a little creative :D"
       />
-      <NumberInput value={doneIn} onChange={setDoneIn} placeholder="Done in (hours)" min={0} max={365} />
+      <NumberInput
+        value={doneIn}
+        onChange={setDoneIn}
+        placeholder="Done in (hours)"
+        min={0}
+        max={365}
+      />
 
       <button onClick={handleClickCreate}>Create</button>
     </div>

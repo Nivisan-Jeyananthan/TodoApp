@@ -8,7 +8,9 @@ import TodoTable from "./TodoTable";
 
 export default function TodoList(): JSX.Element {
   const todos = useTodos() ?? [];
-  const [mode, setMode] = useState<"tree" | "table">(() => (localStorage.getItem("viewMode") as "tree" | "table") ?? "tree");
+  const [mode, setMode] = useState<"tree" | "table">(
+    () => (localStorage.getItem("viewMode") as "tree" | "table") ?? "tree",
+  );
 
   useEffect(() => {
     try {
@@ -21,8 +23,18 @@ export default function TodoList(): JSX.Element {
   return (
     <div>
       <div className="view-toggle" style={{ marginBottom: 12 }}>
-        <button className={mode === "tree" ? "btn primary" : "btn"} onClick={() => setMode("tree")}>Tree</button>
-        <button className={mode === "table" ? "btn primary" : "btn"} onClick={() => setMode("table")}>Table</button>
+        <button
+          className={mode === "tree" ? "btn primary" : "btn"}
+          onClick={() => setMode("tree")}
+        >
+          Tree
+        </button>
+        <button
+          className={mode === "table" ? "btn primary" : "btn"}
+          onClick={() => setMode("table")}
+        >
+          Table
+        </button>
       </div>
 
       {mode === "table" ? (

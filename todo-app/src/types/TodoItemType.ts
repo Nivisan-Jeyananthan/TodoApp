@@ -6,6 +6,10 @@ export type TodoItemType = {
   ParentId?: string;
 };
 
+export type TodoParent = TodoItemType & {
+  children?: TodoItemType[];
+}
+
 export type TodoItemKeys = keyof TodoItemType;
 
 export type TodoItemDispatch = {
