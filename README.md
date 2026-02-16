@@ -20,6 +20,9 @@ With our Todo App, you’ll achieve more and stress less. Let’s make productiv
 
 ![image](https://github.com/user-attachments/assets/19033835-8955-487e-9095-fc53334c2ccd)
 
+Disclaimer!   
+Old Screenshots  
+
 # Get it running! 
 ## Prerequisites 
 - Docker
