@@ -3,6 +3,7 @@ import type { TodoItemType } from "../types/TodoItemType";
 import { TodoStatus, TodoItemDispatchType } from "../types/TodoItemType";
 import { useTodos, useTodosDispatch } from "../context/TodoContext";
 import { formattedEndDate } from "../utils/DateUtils";
+import CryptoUtils from "../utils/CryptoUtils";
 
 type ChildRowProps = {
   child: TodoItemType;
@@ -115,7 +116,7 @@ function TodoNode({ node }: { node: TodoItemType & { children?: TodoItemType[] }
 
   const handleAddChild = useCallback(() => {
     if (!dispatch) return;
-    const newId = crypto.randomUUID();
+    const newId = CryptoUtils.getRandomUUID();
     const newTodo: TodoItemType = { Id: newId, Text: "", Status: TodoStatus.New, ParentId: node.Id };
     dispatch({ type: TodoItemDispatchType.added, todo: newTodo });
     setEditingChildId(newId);

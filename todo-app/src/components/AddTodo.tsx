@@ -1,5 +1,5 @@
 import { useState, ChangeEvent, KeyboardEvent } from "react";
-import { getRandomUUID } from "../utils/CryptoUtils";
+import CryptoUtils  from "../utils/CryptoUtils";
 import type { JSX } from "react";
 import {
   TodoItemType,
@@ -34,7 +34,7 @@ export default function TodoInput(props: ITodoInputProps): JSX.Element {
   const handleClickCreate = () => {
     if (todoText && dispatch) {
       const temp: TodoItemType = {
-        Id: getRandomUUID(),
+        Id: CryptoUtils.getRandomUUID(),
         Text: todoText,
         Status: TodoStatus.New,
         ParentId: props.parentId,

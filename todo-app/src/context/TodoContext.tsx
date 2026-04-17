@@ -2,6 +2,7 @@ import { useContext, useReducer, createContext, Dispatch } from "react";
 import { TodoStatus, TodoItemDispatchType } from "../types/TodoItemType";
 import type { TodoItemType, TodoItemDispatch } from "../types/TodoItemType";
 import type { ReactNode } from "react";
+import CryptoUtils from "../utils/CryptoUtils";
 
 export const TodosContext = createContext<Array<TodoItemType> | null>(null);
 export const TodoDispatchContext =
@@ -19,7 +20,7 @@ const initialTodos: TodoItemType[] =
     ? storedTodos
     : [
         {
-          Id: crypto.randomUUID(),
+          Id: CryptoUtils.getRandomUUID(),
           Text: "Your first Todo! :) ",
           Status: TodoStatus.New,
         },
@@ -54,7 +55,7 @@ function todosReducer(
   switch (action.type) {
     case TodoItemDispatchType.added:
       const newTodo: TodoItemType = {
-        Id: todo?.Id ?? crypto.randomUUID(),
+        Id: todo?.Id ?? CryptoUtils.getRandomUUID(),
         Text: todo?.Text ?? "",
         Status: todo?.Status ?? TodoStatus.New,
         ParentId: (todo as any)?.ParentId,

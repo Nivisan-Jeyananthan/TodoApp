@@ -5,6 +5,7 @@ import { TodoItemDispatchType } from "../types/TodoItemType";
 import type { TodoItemType } from "../types/TodoItemType";
 import Modal from "./Modal";
 import { FileUtils } from "../utils/FileUtils";
+import CryptoUtils from "../utils/CryptoUtils";
 
 export default function ImportExport(): JSX.Element {
   const todos = useTodos() ?? [];
@@ -121,9 +122,9 @@ export default function ImportExport(): JSX.Element {
 
     // First pass: decide new IDs for imported items
     for (const it of pendingImport) {
-      const origId = it?.Id ?? crypto.randomUUID();
+      const origId = it?.Id ?? CryptoUtils.getRandomUUID();
       if (existingIds.has(origId)) {
-        idMap.set(origId, crypto.randomUUID());
+        idMap.set(origId, CryptoUtils.getRandomUUID());
       } else {
         idMap.set(origId, origId);
         existingIds.add(origId); // mark as taken now to avoid collisions within imported set
@@ -132,7 +133,7 @@ export default function ImportExport(): JSX.Element {
 
     // Second pass: remap imported items (IDs and ParentId)
     const remapped = pendingImport.map((it) => {
-      const origId = it?.Id ?? crypto.randomUUID();
+      const origId = it?.Id ?? CryptoUtils.getRandomUUID();
       const newId = idMap.get(origId) ?? origId;
       const parent = (it as any)?.ParentId;
       let newParent: string | undefined = undefined;
